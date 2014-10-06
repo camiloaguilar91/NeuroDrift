@@ -1,4 +1,0 @@
-Hardware Changes:
--- Make RC motors easy to connect by soldering
-Components:
--- Adafruit Motor Shield v2.0
