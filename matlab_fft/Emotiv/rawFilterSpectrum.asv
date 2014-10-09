@@ -39,10 +39,9 @@ end
 
 %% Segmenting the data
 epoch_lenght = 0.25;                %0.25 s
-totaltime = floor(tElapsed*N);
-num_divisions = totaltime/epoch_lenght;    %total time/epoch_lenght
+num_divisions = t_vector/epoch_lenght;    %total time/epoch_lenght
 epoch_samples = floor(epoch_lenght/tElapsed);
-segdata = zeros( epoch_samples , channels, num_divisions); 
+segdata = zeros( ,channels,num_divisions) 
 
 for div = 1:num_divisions
         segdata(:,:,div) = data(1+((div-1)*epoch_samples):div*epoch_samples,:);
