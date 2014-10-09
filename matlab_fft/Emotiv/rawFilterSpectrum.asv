@@ -39,47 +39,54 @@ end
 
 %% Segmenting the data
 epoch_lenght = 0.25;                %0.25 s
-num_divisions = t_vector/epoch_lenght;    %total time/epoch_lenght
+totaltime = floor(tElapsed*N);
+num_divisions = totaltime/epoch_lenght;    %total time/epoch_lenght
 epoch_samples = floor(epoch_lenght/tElapsed);
-segdata = zeros( ,channels,num_divisions) 
+segdata = zeros( epoch_samples , channels, num_divisions); 
+minifVec = linspace(0, Fs/2, epoch_samples/2 + 1);
 
 for div = 1:num_divisions
-        segdata(:,:,div) = data(1+((div-1)*epoch_samples):div*epoch_samples,:);
+        segdata(:,:,div) = detrend(data(1+((div-1)*epoch_samples):div*epoch_samples,:));
 end
 
-
-
-
-%% computing signal mean over relevant data channels 
-sigMean = squeeze(mean(data,2));        % averaging over channels        
-%sigMeanFilt = dataFilt(:,1);
-sigMean = detrend(sigMean,'linear');    % detrending (dc offset/drift)
-sigMeanFilt = squeeze(mean(dataFilt,2));
-sigMeanFilt = detrend(sigMeanFilt,'linear');
-
-%% taking fft of filtered and non-filtered signals for spectral analysis
-% NFFT = nextPow2(N);
-% fftMean= fft(signal,NFFT)/N;
-
-fftMean = abs(fft(sigMean,length(sigMean)));
-fftMean = fftMean(1:length(fVec),:);
-fftMeanFilt = abs(fft(sigMeanFilt,length(sigMeanFilt)));
-fftMeanFilt = fftMeanFilt(1:length(fVec),1);
-
-%% Plotting test signal and filtered results
-%figure; 
-%inds = 5000:(5000+Fs*30);    %data indices for time selection
-%subplot(211); plot(t(inds),data(inds,:));     title('Raw Data');
-%subplot(212); plot(t(inds),dataFilt(inds,:)); title('Low Pass'); 
-
-%% Plotting power spectrum
-figure;
-subplot(211); plot(fVec,fftMean);     title('Raw power spectrum');
-subplot(212); plot(fVec,fftMeanFilt); title('Filtered spectrum');
 figure
-semilogy(fVec,fftMeanFilt); title('Filtered spectrum');
-grid on
+for div = 1:num_divisions
+   temp_fft = abs((fft(segdata(:,:,div))));
+   temp_fft = temp_fft(1:length(minifVec));
+   plot(minifVec, temp_fft);
+   hold on;
+end
 
-figure
-plot(fVec,fftMeanFilt); title('Filtered spectrum');
-grid on
+% %% computing signal mean over relevant data channels 
+% sigMean = squeeze(mean(data,2));        % averaging over channels        
+% %sigMeanFilt = dataFilt(:,1);
+% sigMean = detrend(sigMean,'linear');    % detrending (dc offset/drift)
+% sigMeanFilt = squeeze(mean(dataFilt,2));
+% sigMeanFilt = detrend(sigMeanFilt,'linear');
+% 
+% %% taking fft of filtered and non-filtered signals for spectral analysis
+% % NFFT = nextPow2(N);
+% % fftMean= fft(signal,NFFT)/N;
+% 
+% fftMean = abs(fft(sigMean,length(sigMean)));
+% fftMean = fftMean(1:length(fVec),:);
+% fftMeanFilt = abs(fft(sigMeanFilt,length(sigMeanFilt)));
+% fftMeanFilt = fftMeanFilt(1:length(fVec),1);
+% 
+% %% Plotting test signal and filtered results
+% %figure; 
+% %inds = 5000:(5000+Fs*30);    %data indices for time selection
+% %subplot(211); plot(t(inds),data(inds,:));     title('Raw Data');
+% %subplot(212); plot(t(inds),dataFilt(inds,:)); title('Low Pass'); 
+% 
+% %% Plotting power spectrum
+% figure;
+% subplot(211); plot(fVec,fftMean);     title('Raw power spectrum');
+% subplot(212); plot(fVec,fftMeanFilt); title('Filtered spectrum');
+% figure
+% semilogy(fVec,fftMeanFilt); title('Filtered spectrum');
+% grid on
+% 
+% figure
+% plot(fVec,fftMeanFilt); title('Filtered spectrum');
+% grid on
