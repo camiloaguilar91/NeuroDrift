@@ -10,12 +10,16 @@
 %                                               %
 % Modification History:                         %
 % 10/10/14 OS Initial Version                   %
+% 10/13/14 CA Read data in another directory    %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%
-% loading data and setting data capture variables 
+% loading data and setting data capture variables
 close all; clear;
+cd ../Data/Data_Action
 rawdata = importdata('camilo_eeg_action_partI.csv');
+cd ../../Emotiv
+
 newdata = rawdata.data;
 count = 0;
 channels = 14;
