@@ -52,3 +52,6 @@ for i = 1:length(markers)
     end
 end
 clear highpoint lowpoint center i j;
+
+%%
+for i=1:
