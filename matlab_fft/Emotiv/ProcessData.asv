@@ -1,0 +1,14 @@
+%%Main Script
+clear all;
+Window
+
+data1 = SegmentData('camilo_eeg_action_partI.csv', 0.5);
+data2 = SegmentData('camilo_eeg_action_partII.csv', 0.5);
+SegData  = cat(3,data1,data2);
+
+Power = FFTPower(SegData, 0.5);
+%Function to Low Pass Filter
+
+
+clear data1 data2;
+
