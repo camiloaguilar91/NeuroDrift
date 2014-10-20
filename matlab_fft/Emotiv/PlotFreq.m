@@ -14,9 +14,11 @@ function PlotFreq(trialChannelPower, freq, WINDOWLENGTH,EPOCHLENGTH)
     NumWindows = EPOCHLENGTH/WINDOWLENGTH;      
     [NumFFTPoints, NWindows] = size(trialChannelPower);
     assert(NWindows == NumWindows, 'Resulting Frequency Vector does not have expected number of Windos')
-    tVec = WINDOWLENGTH*(1:NumWindows)-EPOCHLENGTH/2;
     FreqBinsLength = (Fs/2)/NumFFTPoints;
-
+    
+    tVec = WINDOWLENGTH*(1:NumWindows)-EPOCHLENGTH/2;    
+    fVec = linspace(0,Fs/2, NumFFTPoints);
+    
     PlotVector = zeros(NumWindows);
     if (FreqBinsLength ==1)
         for window = 1:NumWindows
@@ -44,6 +46,7 @@ function PlotFreq(trialChannelPower, freq, WINDOWLENGTH,EPOCHLENGTH)
         xlabel('Time (s)');
         ylabel('Power |FFT(W)|');
 
+        imagesc(tVec, fVec, trialChannelPower');
  
 %tVec = linspace(-EPOCHLENGTH/2, EPOCHLENGTH/2,NumWindows);
 
