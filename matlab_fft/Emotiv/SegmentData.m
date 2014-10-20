@@ -16,57 +16,62 @@
 % 10/14/14 OS Finish Segmentation               %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+
 %%
-
 function[ReturnData] = SegmentData(Emotivfile,WINDOWLENGTH, EPOCHLENGTH)
-
     %%
     % loading data and setting data capture variables
     % Input requirements: csv data, EPOCHLENGTH
 
-    %Emotivfile = 'camilo_eeg_action_partI.csv';
     cd ../Data/Data_Action
     rawdata = importdata(Emotivfile);
     cd ../../Emotiv
 
     newdata = rawdata.data;
-    count = 0;
     Fs = 128;
     channels = 14;
     MARKER_CODE = 49;
     epoch_samples = (Fs*EPOCHLENGTH);
 
     %%
-    %To take out useless data from Emotiv output
+    %When a column is asigned = [], all the array is squeezed left
+    %To take out first two columns of useless data
     for i=1:2
-        newdata(:,i-count) = [];
-        count = count + 1;
+        newdata(:,1) = [];
     end
-    count = 0;
+    
+    %To take out last 18 columns of useless data
     for i = 15:33
-        newdata(:,i-count) = [];
-        count = count + 1;
+        newdata(:,15) = [];
     end
-
-    clear count;
+    
     %%
     %Only considers data within +/- 1.5 seconds of marker
     %Formats in 3D array as specified in description
     %Emotive's output file column #15 has the markers
 
-    markers = find(newdata(:,15) == 49);
+    markers = find(newdata(:,15) == MARKER_CODE);
     trials = length(markers);
     processdata = zeros(epoch_samples+1, channels, trials); 
-    for i = 1:trials
-        center = markers(i);
-        lowpoint = center - (epoch_samples/2);  
-        for epoch = 1:(epoch_samples+1)
-            for j = 1:14
-                processdata(epoch,j,i) = newdata(lowpoint+epoch-1,j);
+
+    
+    %take care for first case if it does not have enough samples
+    %it will ignora that trial
+    if((markers(1) - (epoch_samples/2) <= 0))
+        markers(1) = [];
+        trials = trials - 1;
+    end 
+    
+    for current_trial = 1:trials
+        center = markers(current_trial);
+        lowpoint = center - (epoch_samples/2);
+        for epoch_sample = 1:(epoch_samples+1)
+            for channel = 1:channels
+                processdata(epoch_sample,channel,current_trial) = newdata(lowpoint + epoch_sample-1,channel);
             end
         end
     end
-    clear lowpoint center i j epoch;
+    clear lowpoint center i j epoch epoch_sample;
     %%
     %Segments data from samples x channels x trials to
     % samples x channels x trials x windows with window length 1/6 of
@@ -76,11 +81,11 @@ function[ReturnData] = SegmentData(Emotivfile,WINDOWLENGTH, EPOCHLENGTH)
     window_samples = floor(epoch_samples/windows);
     segmented_data = zeros(window_samples, channels, trials, windows);
 
-    for i = 1:trials
-        for index = 1:windows
-            for epoch = 1:floor((epoch_samples+1)/windows)
-                for j = 1:14
-                    segmented_data(epoch,j,i,index) = processdata(epoch+(index-1)*window_samples,j,i);
+    for current_trial = 1:trials
+        for current_window = 1:windows
+            for epoch_sample = 1:floor((epoch_samples+1)/windows)
+                for channel = 1:14
+                    segmented_data(epoch_sample,channel,current_trial,current_window) = processdata(epoch_sample+((current_window-1)*window_samples),channel,current_trial);
                 end
             end
         end
