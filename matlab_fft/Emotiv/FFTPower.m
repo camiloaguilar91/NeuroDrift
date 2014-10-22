@@ -57,5 +57,6 @@ function[trialChannelPower] = FFTPower(SegmentedData, WINDOWLENGTH, EPOCHLENGTH)
     %Ouput: p_buckets x Nwindows
     Power = abs(fft_data);                %taking magnitude of complex (power)
     trialPower = squeeze(mean(Power,3));
+    %trialChannelPower = squeeze((trialPower(:,4,:)));
     trialChannelPower = squeeze(mean(trialPower,2));
 end

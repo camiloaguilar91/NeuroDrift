@@ -60,7 +60,11 @@ function[ReturnData] = SegmentData(Emotivfile,WINDOWLENGTH, EPOCHLENGTH)
     if((markers(1) - (epoch_samples/2) <= 0))
         markers(1) = [];
         trials = trials - 1;
-    end 
+    end
+    if((markers(trials) + (epoch_samples/2)) > size(newdata,1))
+        markers(trials) = [];
+        trials = trials - 1;
+    end
     
     for current_trial = 1:trials
         center = markers(current_trial);
