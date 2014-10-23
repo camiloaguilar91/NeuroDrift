@@ -18,7 +18,7 @@
 
 
 %%
-function[ReturnData] = SegmentData(Emotivfile,WINDOWLENGTH, EPOCHLENGTH)
+function[seg_data] = SegmentData(Emotivfile,WINDOWLENGTH, EPOCHLENGTH)
     %%
     % loading data and setting data capture variables
     % Input requirements: csv data, EPOCHLENGTH
@@ -46,21 +46,24 @@ function[ReturnData] = SegmentData(Emotivfile,WINDOWLENGTH, EPOCHLENGTH)
     end
     
     %%
-    %Only considers data within +/- 1.5 seconds of marker
+    %Only considers data within +/- Epoch_L/2 seconds of marker
     %Formats in 3D array as specified in description
     %Emotive's output file column #15 has the markers
-
+    
     markers = find(newdata(:,15) == MARKER_CODE);
     trials = length(markers);
     processdata = zeros(epoch_samples+1, channels, trials); 
 
     
     %take care for first case if it does not have enough samples
-    %it will ignora that trial
+    %it will ignor that trial
     if((markers(1) - (epoch_samples/2) <= 0))
         markers(1) = [];
         trials = trials - 1;
     end
+    
+    %take care for last case if it does not have enough samples
+    %it will ignor that trial
     if((markers(trials) + (epoch_samples/2)) > size(newdata,1))
         markers(trials) = [];
         trials = trials - 1;
@@ -94,5 +97,7 @@ function[ReturnData] = SegmentData(Emotivfile,WINDOWLENGTH, EPOCHLENGTH)
             end
         end
     end
-    clear center i j epoch index;    ReturnData = segmented_data;
+    clear center i j epoch index;
+    
+   seg_data = segmented_data;
 end
