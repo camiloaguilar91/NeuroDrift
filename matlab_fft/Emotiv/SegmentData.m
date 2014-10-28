@@ -44,7 +44,6 @@ function[seg_data] = SegmentData(Emotivfile,WINDOWLENGTH, EPOCHLENGTH)
     for i = 15:33
         newdata(:,15) = [];
     end
-    
     %%
     %Only considers data within +/- Epoch_L/2 seconds of marker
     %Formats in 3D array as specified in description
@@ -72,13 +71,14 @@ function[seg_data] = SegmentData(Emotivfile,WINDOWLENGTH, EPOCHLENGTH)
     for current_trial = 1:trials
         center = markers(current_trial);
         lowpoint = center - (epoch_samples/2);
+        highpoint = lowpoint + epoch_samples;
         for epoch_sample = 1:(epoch_samples+1)
             for channel = 1:channels
                 processdata(epoch_sample,channel,current_trial) = newdata(lowpoint + epoch_sample-1,channel);
             end
         end
     end
-    clear lowpoint center i j epoch epoch_sample;
+    clear lowpoint center i j epoch epoch_sample highpoint;
     %%
     %Segments data from samples x channels x trials to
     % samples x channels x trials x windows with window length 1/6 of

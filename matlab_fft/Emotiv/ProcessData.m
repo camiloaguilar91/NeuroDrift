@@ -4,15 +4,17 @@
 % Author: Camilo Aguilar                        %
 %                                               %
 % Modification History:                         %
-% 19/10/14 CA Initial Version                   % 
+% 10/19/14 CA Initial Version                   %
+% 10/28/14 OS Included Time Series Function Call%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Main Script-Variables Definition
 %%
 %Load and Segment the Data
 clear;
-WindowLength = 0.5;
+close all;
+WindowLength = 0.25;
 EpochLength = 3;
-freq = 11;
+freq = 4;
 disp('Loading Data...');
 data2 = SegmentData('camilo_eeg_action_partII.csv', WindowLength, EpochLength);
 %data2 = SegmentData('camilo_rest.CSV', WindowLength, EpochLength);
@@ -22,8 +24,10 @@ clear data2
 disp('SUCCES: Data Loaded and Segmented');
 
 %%
-%Function to Low Pass Filter
-
+%Plot Time Series of Raw data
+disp('Plotting Time Series')
+PlotRaw('camilo_eeg_action_partII.csv', WindowLength, EpochLength);
+disp('SUCCESS: Time Series Plotted!');
 
 %%
 %Get the FFT and power of data 

@@ -1,5 +1,8 @@
 %%                                             %%
-% FFTPower.m :                                  %
+% FFTPower.m : Calculate the FFT and Power for  %
+%   Segmented Data and average across trials    %
+%   while choosing a specific channel for       %
+%   plotting.                                   %
 %                                               %
 % Author: Omar Shanta                           %
 %                                               %
@@ -57,6 +60,6 @@ function[trialChannelPower] = FFTPower(SegmentedData, WINDOWLENGTH, EPOCHLENGTH)
     %Ouput: p_buckets x Nwindows
     Power = abs(fft_data);                %taking magnitude of complex (power)
     trialPower = squeeze(mean(Power,3));
-    %trialChannelPower = squeeze((trialPower(:,4,:)));
-    trialChannelPower = squeeze(mean(trialPower,2));
+    trialChannelPower = squeeze(trialPower(:,4,:));
+    %trialChannelPower = squeeze(mean(trialPower,2));
 end
