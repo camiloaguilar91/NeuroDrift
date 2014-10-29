@@ -47,6 +47,7 @@ function[trialChannelPower] = FFTPower(SegmentedData, WINDOWLENGTH, EPOCHLENGTH)
                     end
                     
                     SegmentedData(:,currrentChannel,currentTrial,currentWindow) = detrend(SegmentedData(:,currrentChannel,currentTrial,currentWindow));
+%                    SegmentedData(:,currrentChannel,currentTrial,currentWindow) = detrend(SegmentedData(:,currrentChannel,currentTrial,currentWindow), 'constant');
                     fft_data(:,currrentChannel,currentTrial,currentWindow) = fft(SegmentedData(:,currrentChannel,currentTrial,currentWindow));
                     count = count + 1;
                     
@@ -60,6 +61,10 @@ function[trialChannelPower] = FFTPower(SegmentedData, WINDOWLENGTH, EPOCHLENGTH)
     %Ouput: p_buckets x Nwindows
     Power = abs(fft_data);                %taking magnitude of complex (power)
     trialPower = squeeze(mean(Power,3));
-    trialChannelPower = squeeze(trialPower(:,4,:));
-    %trialChannelPower = squeeze(mean(trialPower,2));
+    %trialChannelPower = squeeze(trialPower(:,4,:));
+    trialChannelPower = squeeze(mean(trialPower,2));
+    
+    trialChannelPower = trialChannelPower(1:size(trialChannelPower,1)/2,:);
+
+    
 end

@@ -29,7 +29,9 @@ function[seg_data] = SegmentData(Emotivfile,WINDOWLENGTH, EPOCHLENGTH)
 
     newdata = rawdata.data;
     Fs = 128;
+    delay = 100; %(100 SAMPLES)
     channels = 14;
+    %MARKER_CODE = 13000;
     MARKER_CODE = 49;
     epoch_samples = (Fs*EPOCHLENGTH);
 
@@ -49,7 +51,9 @@ function[seg_data] = SegmentData(Emotivfile,WINDOWLENGTH, EPOCHLENGTH)
     %Formats in 3D array as specified in description
     %Emotive's output file column #15 has the markers
     
-    markers = find(newdata(:,15) == MARKER_CODE);
+    %MARKER_CODE = 1300;
+    %markers = find(mod(newdata(:,15),MARKER_CODE) == 0);
+    markers = find((newdata(:,15) == MARKER_CODE));
     trials = length(markers);
     processdata = zeros(epoch_samples+1, channels, trials); 
 
@@ -60,7 +64,7 @@ function[seg_data] = SegmentData(Emotivfile,WINDOWLENGTH, EPOCHLENGTH)
         markers(1) = [];
         trials = trials - 1;
     end
-    
+
     %take care for last case if it does not have enough samples
     %it will ignor that trial
     if((markers(trials) + (epoch_samples/2)) > size(newdata,1))
@@ -71,10 +75,9 @@ function[seg_data] = SegmentData(Emotivfile,WINDOWLENGTH, EPOCHLENGTH)
     for current_trial = 1:trials
         center = markers(current_trial);
         lowpoint = center - (epoch_samples/2);
-        highpoint = lowpoint + epoch_samples;
         for epoch_sample = 1:(epoch_samples+1)
             for channel = 1:channels
-                processdata(epoch_sample,channel,current_trial) = newdata(lowpoint + epoch_sample-1,channel);
+                processdata(epoch_sample,channel,current_trial) = newdata(lowpoint + delay + epoch_sample-1,channel);
             end
         end
     end

@@ -6,6 +6,7 @@
 %                                               %
 % Modification History:                         %
 % 10/28/14 OS Initial Version                   %
+% 10/28/14 CA Improve effiency and plot all     %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 function []= PlotRaw(Emotivfile,WINDOWLENGTH, EPOCHLENGTH)
@@ -38,47 +39,21 @@ function []= PlotRaw(Emotivfile,WINDOWLENGTH, EPOCHLENGTH)
     end
     
     %Plots raw data and markers on same graph
-    figure
-    subplot(3,1,1);plot(newdata(1:6000,1));
-    xlabel('time (s)');
-    ylabel('Channel 1');
-    subplot(3,1,2);plot(newdata(1:6000,2));
-    xlabel('time (s)');
-    ylabel('Channel 2');
-    subplot(3,1,3);plot(newdata(1:6000,15));
-    axis([0 3500 0 60]);
-    xlabel('time (s)');
-    ylabel('Markers');
-    
-    %%
-    %Only considers data within +/- Epoch_L/2 seconds of marker
-    %Formats in 3D array as specified in description
-    %Emotive's output file column #15 has the markers
-    
-    markers = find(newdata(:,15) == MARKER_CODE);
-    trials = length(markers);
-
-    %take care for first case if it does not have enough samples
-    %it will ignor that trial
-    if((markers(1) - (epoch_samples/2) <= 0))
-        markers(1) = [];
-        trials = trials - 1;
-    end
-    
-    %take care for last case if it does not have enough samples
-    %it will ignor that trial
-    if((markers(trials) + (epoch_samples/2)) > size(newdata,1))
-        markers(trials) = [];
-        trials = trials - 1;
-    end
-    
-    for current_trial = 1:trials
-        center = markers(current_trial);
-        lowpoint = center - (epoch_samples/2);
-        highpoint = lowpoint + epoch_samples;
-        hold on
-        plot([lowpoint,lowpoint],[0,60],'Color',[1 0 0]);
-        plot([lowpoint + epoch_samples,lowpoint + epoch_samples],[0,60],'Color',[0 1 1]);
-    end
-    clear lowpoint center i j epoch epoch_sample highpoint;
+%     figure
+%     for i=1:channels 
+%         subplot(channels,1,i);plot(newdata(1:6000,i),'positio);
+%         xlabel('time (s)');
+%         text = ['Channel ' i];
+%         ylabel(text);
+%     end
+        sampleSpan = 1:2000;
+        for i = 1:6
+        subplot(7,1,i);plot(newdata(sampleSpan,i));
+        xlabel('sample');
+        ylabel(strcat('Channel ',num2str(i)));
+        end
+        subplot(7,1,7);plot(newdata(sampleSpan,15));
+        %axis([0 3500 0 60]);
+        xlabel('sample');
+        ylabel('Markers');
 end

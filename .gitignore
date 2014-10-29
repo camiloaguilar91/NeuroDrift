@@ -1,1 +1,5 @@
 matlab_fft/Emotiv/FFTPower.asv
+matlab_fft/Emotiv/ProcessData.asv
+matlab_fft/Emotiv/PlotRaw.asv
+matlab_fft/Emotiv/PlotFreq.asv
+*.asv

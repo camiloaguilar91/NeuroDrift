@@ -10,24 +10,28 @@
 %Main Script-Variables Definition
 %%
 %Load and Segment the Data
-clear;
+%clear;
 close all;
-WindowLength = 0.25;
-EpochLength = 3;
-freq = 4;
+%WindowLength = 1;
+%EpochLength = 5;
+%freq = 4;
+WindowLength = wl;
+EpochLength = el;
+%file = 'Omar_pilot_runII.CSV';
+%file = 'camilo_blink.CSV';
+file = 'camilo_eeg_action_partII.csv';
 disp('Loading Data...');
-data2 = SegmentData('camilo_eeg_action_partII.csv', WindowLength, EpochLength);
-%data2 = SegmentData('camilo_rest.CSV', WindowLength, EpochLength);
-SegData = data2;%cat(3,data1,data2);
+data = SegmentData(file,WindowLength, EpochLength);
+SegData = data;%cat(3,data1,data2);
 clear data2
 
 disp('SUCCES: Data Loaded and Segmented');
 
 %%
 %Plot Time Series of Raw data
-disp('Plotting Time Series')
-PlotRaw('camilo_eeg_action_partII.csv', WindowLength, EpochLength);
-disp('SUCCESS: Time Series Plotted!');
+% disp('Plotting Time Series')
+% PlotRaw(file, WindowLength, EpochLength);
+% disp('SUCCESS: Time Series Plotted!');
 
 %%
 %Get the FFT and power of data 
