@@ -16,7 +16,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-function[trialChannelPower] = FFTPower(SegmentedData, WINDOWLENGTH, EPOCHLENGTH)
+function[trialChannelPower,UpperStandardDeviation,LowerStandardDeviation] = FFTPower(SegmentedData, WINDOWLENGTH, EPOCHLENGTH)
     %%
     %FFT on each window to change to frequency domain
     %INPUT:  SegmentedData[Nsamples(per window), Nchannels, Ntrials, Nwindows] 
@@ -59,12 +59,31 @@ function[trialChannelPower] = FFTPower(SegmentedData, WINDOWLENGTH, EPOCHLENGTH)
     %Take power of signal
     %Input: f_buckets x Nchannels x Ntrials x Nwindows
     %Ouput: p_buckets x Nwindows
-    Power = abs(fft_data);                %taking magnitude of complex (power)
+    Power = abs(fft_data);                %taking magnitude of complex (power)  
     trialPower = squeeze(mean(Power,3));
-    %trialChannelPower = squeeze(trialPower(:,4,:));
+    trialStandardDeviation = squeeze(std(Power,0,3));
     trialChannelPower = squeeze(mean(trialPower,2));
+    trialChannelStandardDeviation = squeeze(mean(trialStandardDeviation,2)); 
+    %trialChannelPower = squeeze(trialPower(:,4,:));
+    %standard_deviation = std(trialPower,0,2);
+    %mean_channels = mean(trialPower,2);
+    
+    
+    
+    
     
     trialChannelPower = trialChannelPower(1:size(trialChannelPower,1)/2,:);
+    trialChannelStandardDeviation = trialChannelStandardDeviation(1:size(trialChannelStandardDeviation,1)/2,:);
+    for i = 1:size(trialChannelPower,1)
+        for j = 1:size(trialChannelPower,2)
+            UpperStandardDeviation(i,j) = trialChannelPower(i,j) + trialChannelStandardDeviation(i,j);
+            LowerStandardDeviation(i,j) = trialChannelPower(i,j) - trialChannelStandardDeviation(i,j);
+        end 
+    end
+    
+   
+    
+        
 
     
 end

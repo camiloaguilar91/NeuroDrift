@@ -17,15 +17,18 @@ close all;
 %freq = 4;
 WindowLength = wl;
 EpochLength = el;
+file = 'Thuong-pilotII-08.11.14.17.32.40.CSV'; 
+%file = 'Thuong-pilotII-08.11.14.16.57.39.CSV'
 %file = 'Omar_pilot_runII.CSV';
 %file = 'camilo_blink.CSV';
-file = 'camilo_eeg_action_partII.csv';
-disp('Loading Data...');
+%file = 'camilo_eeg_action_partII.csv';
+text = ['Loading:' file '...'];
+disp(text);
 data = SegmentData(file,WindowLength, EpochLength);
 SegData = data;%cat(3,data1,data2);
-clear data2
+clear data2 text
 
-disp('SUCCES: Data Loaded and Segmented');
+disp('SUCCESS: Data Loaded and Segmented');
 
 %%
 %Plot Time Series of Raw data
@@ -36,10 +39,10 @@ disp('SUCCES: Data Loaded and Segmented');
 %%
 %Get the FFT and power of data 
 disp('FFTing the data...')
-trialChannelPower = FFTPower(SegData, WindowLength, EpochLength);
+[trialChannelPower,UpperStandardDeviation,LowerStandardDeviation]= FFTPower(SegData, WindowLength, EpochLength);
 disp('SUCCESS: Data FFTED!');
 
 %%
 %Plot Specific Frequency
 disp('Plotting Data');
-PlotFreq(trialChannelPower, freq, WindowLength, EpochLength);
+PlotFreq(trialChannelPower,UpperStandardDeviation,LowerStandardDeviation, freq, WindowLength, EpochLength);

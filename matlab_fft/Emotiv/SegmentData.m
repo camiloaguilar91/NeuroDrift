@@ -29,7 +29,7 @@ function[seg_data] = SegmentData(Emotivfile,WINDOWLENGTH, EPOCHLENGTH)
 
     newdata = rawdata.data;
     Fs = 128;
-    delay = 100; %(100 SAMPLES)
+    delay = 0; %(100 SAMPLES)
     channels = 14;
     %MARKER_CODE = 13000;
     MARKER_CODE = 49;

@@ -3,3 +3,5 @@ matlab_fft/Emotiv/ProcessData.asv
 matlab_fft/Emotiv/PlotRaw.asv
 matlab_fft/Emotiv/PlotFreq.asv
 *.asv
+matlab_fft/Data/Data_Action/camilo_blink.CSV
+matlab_fft/Data/Data_Action/map_channels.CSV
