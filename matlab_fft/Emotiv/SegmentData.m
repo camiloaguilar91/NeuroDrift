@@ -18,7 +18,7 @@
 
 
 %%
-function[seg_data] = SegmentData(Emotivfile,WINDOWLENGTH, EPOCHLENGTH)
+function[seg_data, trials] = SegmentData(Emotivfile,WINDOWLENGTH, EPOCHLENGTH)
     %%
     % loading data and setting data capture variables
     % Input requirements: csv data, EPOCHLENGTH
