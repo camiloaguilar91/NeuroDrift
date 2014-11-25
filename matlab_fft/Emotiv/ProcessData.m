@@ -20,8 +20,8 @@ EpochLength = el;
 %file = 'camilo-exp2_I-13.11.14.18.38.48.CSV';
 %file2 = 'camilo-exp2-13.11.14.17.56.50.CSV';
 %file = 'Omar_L-Exp4-16.11.14.23.26.51.CSV';
-%file = 'Thuong-pilotII-08.11.14.17.32.40.CSV'; 
-file = 'Thuong-pilot-08.11.14.16.57.39.CSV';
+file = 'Thuong-pilotII-08.11.14.17.32.40.CSV'; 
+%file = 'Thuong-pilot-08.11.14.16.57.39.CSV';
 %file = 'Omar_pilot_runII.CSV';
 %file = 'camilo_blink.CSV';
 %file = 'camilo_eeg_action_partII.csv';
@@ -45,12 +45,14 @@ disp('SUCCESS: Data Loaded and Segmented');
 %%
 %Get the FFT and power of data 
 disp('FFTing the data...')
-[trialChannelPower,UpperStandardDeviation,LowerStandardDeviation, trialPower]= FFTPower(SegData, WindowLength, EpochLength);
+[trialChannelPower,UpperStandardDeviation,LowerStandardDeviation, ...
+    trialPower, UpperStandardDeviationChannel, LowerStandardDeviationChannel]= FFTPower(SegData, WindowLength, EpochLength);
 disp('SUCCESS: Data FFTED!');
 
 %%
 %Plot Specific Frequency
 disp('Plotting Data');
-PlotFreq(trialChannelPower,UpperStandardDeviation,LowerStandardDeviation, freq, WindowLength, EpochLength,file);
+PlotFreq(trialChannelPower,UpperStandardDeviation,LowerStandardDeviation, ...
+    trialPower, UpperStandardDeviationChannel, LowerStandardDeviationChannel, freq, WindowLength, EpochLength,file);
 
 %PlotLocation
