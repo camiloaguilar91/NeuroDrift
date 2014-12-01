@@ -95,12 +95,12 @@ function PlotFreq(trialChannelPower,UpperStandardDeviation,LowerStandardDeviatio
     PlotVector = (PlotVector - baseline)./baseline * 100;
     PlotUpperStandardDeviation = (PlotUpperStandardDeviation - baseline)./baseline * 100;
     PlotLowerStandardDeviation = (PlotLowerStandardDeviation - baseline)./baseline * 100;
-    
+    baselineChannel = size(PlotVectorChannel,1);
     for channel = 1:size(PlotVectorChannel,1)
-        baselineChannel(channel) = mean(PlotVectorChannel(1: NumWindows/2-1,channel));
-        PlotVectorChannel(channel,:) = (PlotVectorChannel(channel,:) - baselineChannel(channel))./baselineChannel(channel) * 100;
-        PlotUpperStandardDeviationChannel(channel,:) = (PlotUpperStandardDeviationChannel(channel,:) - baselineChannel(channel))./baselineChannel(channel) * 100;
-        PlotLowerStandardDeviationChannel(channel,:) = (PlotLowerStandardDeviationChannel(channel,:) - baselineChannel(channel))./baselineChannel(channel) * 100;
+        baselineChannel(channel) = mean(PlotVectorChannel(channel,1: NumWindows/2-1));
+        PlotVectorChannel(channel,:) = ((PlotVectorChannel(channel,:) - baselineChannel(channel))./baselineChannel(channel)) * 100;
+        PlotUpperStandardDeviationChannel(channel,:) = ((PlotUpperStandardDeviationChannel(channel,:) - baselineChannel(channel))./baselineChannel(channel)) * 100;
+        PlotLowerStandardDeviationChannel(channel,:) = ((PlotLowerStandardDeviationChannel(channel,:) - baselineChannel(channel))./baselineChannel(channel)) * 100;
     end
     
     %%
@@ -108,7 +108,7 @@ function PlotFreq(trialChannelPower,UpperStandardDeviation,LowerStandardDeviatio
     %Plot
     %=============================================
     
-    figure
+    figure(33)
     plot(tVec,PlotVector); 
     hold on 
     plot(tVec,PlotUpperStandardDeviation,'Color',[1 0 0]); 
@@ -136,7 +136,7 @@ function PlotFreq(trialChannelPower,UpperStandardDeviation,LowerStandardDeviatio
         %Channel 14
         %axis([min(tVec) max(tVec) -100 5000]);
         %Others
-        axis([min(tVec) max(tVec) -100 300]);
+        %axis([min(tVec) max(tVec) -100 300]);
     end
     
     %%

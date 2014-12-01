@@ -43,8 +43,8 @@ function[seg_data, trials] = SegmentData(Emotivfile,WINDOWLENGTH, EPOCHLENGTH)
     end
     
     %To take out last 18 columns of useless data
-    for i = 15:33
-        newdata(:,15) = [];
+    for i = channels+1:33
+        newdata(:,channels+1) = [];
     end
     %%
     %Only considers data within +/- Epoch_L/2 seconds of marker
@@ -53,7 +53,7 @@ function[seg_data, trials] = SegmentData(Emotivfile,WINDOWLENGTH, EPOCHLENGTH)
     
     %MARKER_CODE = 1300;
     %markers = find(mod(newdata(:,15),MARKER_CODE) == 0);
-    markers = find((newdata(:,15) == MARKER_CODE));
+    markers = find((newdata(:,channels+1) == MARKER_CODE));
     trials = length(markers);
     processdata = zeros(epoch_samples+1, channels, trials); 
 
@@ -94,7 +94,7 @@ function[seg_data, trials] = SegmentData(Emotivfile,WINDOWLENGTH, EPOCHLENGTH)
     for current_trial = 1:trials
         for current_window = 1:windows
             for epoch_sample = 1:floor((epoch_samples+1)/windows)
-                for channel = 1:14
+                for channel = 1:channels
                     segmented_data(epoch_sample,channel,current_trial,current_window) = processdata(epoch_sample+((current_window-1)*window_samples),channel,current_trial);
                 end
             end
